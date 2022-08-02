@@ -9,8 +9,13 @@ exports.userLoginV1 = (req, res) => {
 
 exports.getUserV1 = (req, res) => {
     const userid = req.params.userid
-
-    res.send(userid)
+    UsersApiService.getUserV1(user)
+        .then(response => {
+            res.send(response)
+        })
+        .catch(response => {
+            res.send(response)
+        })
 }
 
 exports.createUserV1 = (req, res) => {
@@ -27,14 +32,24 @@ exports.createUserV1 = (req, res) => {
 exports.updateUserV1 = (req, res) => {
     const userid = req.params.userid
     const user = req.body
-
-    res.send('user updated')
+    UsersApiService.updateUserV1(userid, user)
+        .then(response => {
+            res.send(response)
+        })
+        .catch(response => {
+            res.send(response)
+        })
 }
 
 exports.deleteUserV1 = (req, res) => {
     const userid = req.params.userid
-
-    res.send("user deleted")
+    UsersApiService.deleteUserV1(userid)
+        .then(response => {
+            res.send(response)
+        })
+        .catch(response => {
+            res.send(response)
+        })
 }
 
 

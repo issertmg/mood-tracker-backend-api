@@ -2,13 +2,13 @@ const mongoose = require('mongoose')
 const entrySchema = require('../models/Entry').schema
 
 const userSchema = mongoose.Schema({
-    firstname: String,
-    middlename: String,
-    lastname: String,
-    height: Number,
-    weight: Number,
-    email: String,
-    password: String,
+    firstname: {type: String, default: ''},
+    middlename: {type: String, default: ''},
+    lastname: {type: String, default: ''},
+    height: {type: Number, default: 0},
+    weight: {type: Number, default: 0},
+    email: {type: String, default: ''},
+    password: {type: String, default: ''},
     entries: [entrySchema]
 })
 

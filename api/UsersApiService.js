@@ -30,16 +30,47 @@ exports.createUserV1 = (user) => {
 }
 exports.getUserV1 = (userid) => {
     return new Promise((resolve, reject) => {
-        resolve()
+        const response = {}
+        User.findById(userid, {}, (err, user) => {
+            if (err) {
+                response['status'] = 500
+                reject(response)
+            }
+            else {
+                response['status'] = 200
+                response['user'] = user
+                resolve(response)
+            }
+        })
     })
 }
 exports.updateUserV1 = (userid, user) => {
     return new Promise((resolve, reject) => {
-        resolve()
+        const response = {}
+        User.findByIdAndUpdate(userid, user, err => {
+            if (err) {
+                response['status'] = 500
+                reject(response)
+            }
+            else {
+                response['status'] = 200
+                resolve(response)
+            }
+        })
     })
 }
 exports.deleteUserV1 = (userid) => {
     return new Promise((resolve, reject) => {
-        resolve()
+        const response = {}
+        User.findByIdAndDelete(userid, {}, err => {
+            if (err) {
+                response['status'] = 500
+                reject(response)
+            }
+            else {
+                response['status'] = 200
+                resolve(response)
+            }
+        })
     })
 }
