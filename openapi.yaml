@@ -1,0 +1,323 @@
+openapi: 3.0.2
+info:
+  title: Mood Tracker
+  version: '1.0'
+paths:
+  /users/login:
+    post:
+      tags:
+        - Users
+      summary: Login User
+      description: User Logs In by User ID
+      operationId: userLoginV1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                  format: password
+        required: true
+      responses:
+        '200':
+          description: User has logged in
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+  /users:
+    post:
+      tags:
+        - Users
+      summary: New User
+      description: Create a new user
+      operationId: createUserV1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+  /users/{userId}:
+    get:
+      summary: Get User
+      description: Get **single** User by Id
+      tags:
+        - Users
+      operationId: getSingleUserV1
+      parameters:
+        - name: includeEntries
+          in: query
+          schema:
+            type: number
+            format: int32
+            enum:
+              - 0
+              - 1
+        - $ref: '#/components/parameters/UserIdParam'
+      responses:
+        '200':
+          description: Found User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      tags:
+        - Users
+      summary: Update User
+      description: Update User By Id
+      operationId: updateUserV1
+      parameters:
+        - $ref: '#/components/parameters/UserIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '200':
+          description: User Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Entry not found
+        '500':
+          description: Internal server error
+    delete:
+      tags:
+        - Users
+      summary: Delete User
+      description: Delete User By ID
+      operationId: deleteUserV1
+      parameters:
+        - $ref: '#/components/parameters/UserIdParam'
+      responses:
+        '200':
+          description: User Deleted
+        '500':
+          description: Internal server error - unable to delete user
+  /users/{userId}/entries:
+    get:
+      summary: Get Entries
+      description: Get All Entries by User Id
+      operationId: getEntriesV1
+      tags:
+        - Entries
+      parameters:
+        - name: dateFrom
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: dateTo
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - $ref: '#/components/parameters/UserIdParam'
+      responses:
+        '200':
+          description: Found Entry
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Entry'
+        '404':
+          description: 404 - Entry not found
+    post:
+      tags:
+        - Entries
+      summary: New Entry
+      description: Create a new entry with User Id
+      operationId: addNewEntryV1
+      parameters:
+        - $ref: '#/components/parameters/UserIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Entry'
+        required: true
+      responses:
+        '201':
+          description: Entry created
+        '500':
+          description: >-
+            Internal server error - entry creation failed - unable to create
+            entry - unable to update entry
+  /users/{userId}/entries/{entryId}:
+    get:
+      summary: Get Entry
+      description: Get **single** Entry by User Id and Entry Id
+      operationId: getOneEntryV1
+      tags:
+        - Entries
+      parameters:
+        - $ref: '#/components/parameters/UserIdParam'
+        - $ref: '#/components/parameters/EntryIdParam'
+      responses:
+        '200':
+          description: Found Entry
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entry'
+        '404':
+          description: Entry not found
+    put:
+      tags:
+        - Entries
+      summary: Update Entry
+      description: Update Entry By User Id and Entry Id
+      operationId: updateEntryV1
+      parameters:
+        - $ref: '#/components/parameters/UserIdParam'
+        - $ref: '#/components/parameters/EntryIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Entry'
+        required: true
+      responses:
+        '200':
+          description: Entry Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entry'
+        '404':
+          description: Entry not found
+        '500':
+          description: Internal server error
+    delete:
+      summary: Delete Entry
+      description: Delete Entry By User Id and Entry Id
+      operationId: deleteEntryV1
+      tags:
+        - Entries
+      parameters:
+        - $ref: '#/components/parameters/EntryIdParam'
+        - $ref: '#/components/parameters/UserIdParam'
+      responses:
+        '200':
+          description: Entry Deleted
+        '500':
+          description: Internal server error - unable to delete entry
+  
+components:
+  parameters:
+    UserIdParam:
+      name: userId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    EntryIdParam:
+      name: entryId
+      in: path
+      description: Entry Id
+      required: true
+      schema:
+        type: string
+        format: uuid
+    TagIdParam:
+      name: tagId
+      in: path
+      description: Tag Id
+      required: true
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        username:
+          type: string
+          example: albie
+        firstname:
+          maxLength: 100
+          minLength: 2
+          type: string
+          example: Albus
+        middlename:
+          maxLength: 100
+          minLength: 2
+          type: string
+          example: Brian
+        lastname:
+          maxLength: 100
+          minLength: 2
+          type: string
+          example: Dumbledore
+        email:
+          maxLength: 100
+          minLength: 4
+          type: string
+          format: email
+        height:
+          type: number
+          format: double
+        weight:
+          type: number
+          format: double
+        password:
+          maxLength: 50
+          minLength: 7
+          type: string
+          format: password
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Entry'
+    Entry:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        datecreated:
+          type: string
+          format: date-time
+          example: 2022-07-21T17:32:28.000Z
+        dateupdated:
+          type: string
+          format: date-time
+          example: 2022-07-21T17:32:28.000Z
+        mood:
+          type: number
+          format: integer
+        note:
+          type: string
+          maxLength: 250
+          minLength: 0
+          example: This is a note
