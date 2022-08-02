@@ -10,7 +10,7 @@ exports.getEntriesV1 = (userid) => {
         }
     })
 }
-exports.addEntryV1 = (userid, body) => {
+exports.addEntryV1 = (userid, entry) => {
     return new Promise((resolve, reject) => {
         resolve()
     })
@@ -20,7 +20,7 @@ exports.getEntryV1 = (userid, entryid) => {
         resolve()
     })
 }
-exports.updateEntryV1 = (userid, entryid, body) => {
+exports.updateEntryV1 = (userid, entryid, entry) => {
     return new Promise((resolve, reject) => {
         resolve()
     })

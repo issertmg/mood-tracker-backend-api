@@ -1,5 +1,6 @@
+const User = require('../models/User')
 
-exports.userLoginV1 = (body) => {
+exports.userLoginV1 = (user) => {
     return new Promise((resolve, reject) => {
         const examples = {};
         examples['application/json'] = "497f6eca-6276-4993-bfeb-53cbbbba6f08";
@@ -10,9 +11,12 @@ exports.userLoginV1 = (body) => {
         }
     })
 }
-exports.createUserV1 = (body) => {
+exports.createUserV1 = (user) => {
     return new Promise((resolve, reject) => {
-        resolve()
+        const userDoc = new User(user)
+        userDoc.save().then(result => {
+            resolve(result)
+        })
     })
 }
 exports.getUserV1 = (userid) => {
@@ -20,7 +24,7 @@ exports.getUserV1 = (userid) => {
         resolve()
     })
 }
-exports.updateUserV1 = (userid, body) => {
+exports.updateUserV1 = (userid, user) => {
     return new Promise((resolve, reject) => {
         resolve()
     })

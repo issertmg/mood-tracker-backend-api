@@ -1,3 +1,4 @@
+require('dotenv').config()
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -21,6 +22,10 @@ app.use(indexRouter)
 app.use(usersRouter)
 app.use(entriesRouter)
 
+// connect to DB
+const mongoose = require('mongoose')
+const url = `mongodb+srv://issertmg:${process.env.DB_PASSWORD}@cluster0.lrs8g.mongodb.net/moodTrackerApp?retryWrites=true&w=majority`
+mongoose.connect(url)
 
 
 // catch 404 and forward to error handler

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const entrySchema = require('../models/Entry')
+const entrySchema = require('../models/Entry').schema
 
 const userSchema = mongoose.Schema({
     firstname: String,
