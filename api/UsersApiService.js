@@ -13,9 +13,18 @@ exports.userLoginV1 = (user) => {
 }
 exports.createUserV1 = (user) => {
     return new Promise((resolve, reject) => {
+        const response = {}
         const userDoc = new User(user)
-        userDoc.save().then(result => {
-            resolve(result)
+        userDoc.save().then(savedDoc => {
+            if (savedDoc === userDoc) {
+                response['status'] = 201
+                response['user'] = savedDoc
+                resolve(response)
+            }
+            else {
+                response['status'] = 500
+                reject(response)
+            }
         })
     })
 }
