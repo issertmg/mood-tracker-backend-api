@@ -60,7 +60,7 @@ paths:
       description: Get **single** User by Id
       tags:
         - Users
-      operationId: getSingleUserV1
+      operationId: getUserV1
       parameters:
         - name: includeEntries
           in: query
@@ -151,7 +151,7 @@ paths:
         - Entries
       summary: New Entry
       description: Create a new entry with User Id
-      operationId: addNewEntryV1
+      operationId: addEntryV1
       parameters:
         - $ref: '#/components/parameters/UserIdParam'
       requestBody:
@@ -171,7 +171,7 @@ paths:
     get:
       summary: Get Entry
       description: Get **single** Entry by User Id and Entry Id
-      operationId: getOneEntryV1
+      operationId: getEntryV1
       tags:
         - Entries
       parameters:
