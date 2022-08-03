@@ -27,4 +27,8 @@ userSchema.methods.verifyPassword = function(password) {
     return key === derivedKey
 }
 
+userSchema.methods.setNickname = function() {
+    this.nickname = this.email.split('@')[0]
+}
+
 module.exports = mongoose.model('User', userSchema, 'Users');

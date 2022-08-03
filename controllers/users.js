@@ -9,7 +9,7 @@ exports.userLoginV1 = (req, res) => {
             res.status(200).json(response)
         })
         .catch(response => {
-            res.status(400).json(response)
+            res.status(response.status).json({message: response.message})
         })
 }
 
@@ -20,7 +20,7 @@ exports.getUserV1 = (req, res) => {
             res.status(200).json(response)
         })
         .catch(response => {
-            res.status(500).json(response)
+            res.status(response.status).json({message: response.message})
         })
 }
 
@@ -35,7 +35,7 @@ exports.createUserV1 = (req, res) => {
             res.status(201).json(response)
         })
         .catch(response => {
-            res.status(500).json(response)
+            res.status(response.status).json({message: response.message})
         })
 }
 
@@ -51,22 +51,22 @@ exports.updateUserV1 = (req, res) => {
     }
 
     UsersApiService.updateUserV1(userid, user)
-        .then(response => {
-            res.status(200).json(response)
+        .then(() => {
+            res.status(200).end()
         })
         .catch(response => {
-            res.status(500).json(response)
+            res.status(response.status).json({message: response.message})
         })
 }
 
 exports.deleteUserV1 = (req, res) => {
     const userid = req.params.userid
     UsersApiService.deleteUserV1(userid)
-        .then(response => {
-            res.status(200).json(response)
+        .then(() => {
+            res.status(200).end()
         })
         .catch(response => {
-            res.status(500).json(response)
+            res.status(response.status).json({message: response.message})
         })
 }
 

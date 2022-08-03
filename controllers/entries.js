@@ -8,7 +8,7 @@ exports.getEntriesV1 = (req, res) => {
             res.status(200).json(response)
         })
         .catch(response => {
-            res.status(500).json(response)
+            res.status(response.status).json({message: response.message})
         })
 }
 
@@ -23,7 +23,7 @@ exports.addEntryV1 = (req, res) => {
             res.status(201).json(response)
         })
         .catch(response => {
-            res.status(500).json(response)
+            res.status(response.status).json({message: response.message})
         })
 }
 
@@ -35,7 +35,7 @@ exports.getEntryV1 = (req, res) => {
             res.status(200).json(response)
         })
         .catch(response => {
-            res.status(500).json(response)
+            res.status(response.status).json({message: response.message})
         })
 }
 exports.updateEntryV1 = (req, res) => {
@@ -46,21 +46,21 @@ exports.updateEntryV1 = (req, res) => {
         note: req.body.note
     }
     EntriesApiService.updateEntryV1(userid, entryid, entry)
-        .then(response => {
-            res.status(200).json(response)
+        .then(() => {
+            res.status(200).end()
         })
         .catch(response => {
-            res.status(500).json(response)
+            res.status(response.status).json({message: response.message})
         })
 }
 exports.deleteEntryV1 = (req, res) => {
     const userid = req.params.userid
     const entryid = req.params.entryid
     EntriesApiService.deleteEntryV1(userid, entryid)
-        .then(response => {
-            res.status(200).json(response)
+        .then(() => {
+            res.status(200).end()
         })
         .catch(response => {
-            res.status(500).json(response)
+            res.status(response.status).json({message: response.message})
         })
 }

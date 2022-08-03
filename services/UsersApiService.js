@@ -2,87 +2,65 @@ const User = require('../models/User')
 
 exports.userLoginV1 = (email, password) => {
     return new Promise((resolve, reject) => {
-        const response = {}
         User.findOne({email: email}, (error, userDoc) => {
             if (userDoc) {
                 if (userDoc.verifyPassword(password)) {
-                    response['status'] = 200
-                    response['userid'] = userDoc._id
-                    resolve(response)
+                    resolve(userDoc._id)
                 }
                 else {
-                    response['status'] = 400
-                    reject(response)
+                    reject({status: 401, message: "Incorrect password."})
                 }
             }
             else {
-                response['status'] = 401
-                reject(response)
+                reject({status: 404, message: "User not found."})
             }
         })
     })
 }
 exports.createUserV1 = (user) => {
     return new Promise((resolve, reject) => {
-        const response = {}
         const userDoc = new User(user)
         userDoc.hashPassword()
+        userDoc.setNickname()
         userDoc.save((error, savedDoc) => {
             if (error) {
-                response['status'] = 500
-                reject(response)
+                reject({status: 400, message: "User has invalid attribute/s."})
             }
             else {
-                response['status'] = 201
-                response['user'] = savedDoc
-                resolve(response)
+                resolve(savedDoc._id)
             }
         })
     })
 }
 exports.getUserV1 = (userid) => {
     return new Promise((resolve, reject) => {
-        const response = {}
         User.findById(userid, {}, (error, user) => {
             if (error) {
-                response['status'] = 500
-                reject(response)
+                reject({status: 404, message: "Unable to find user."})
             }
             else {
-                response['status'] = 200
-                response['user'] = user
-                resolve(response)
+                resolve(user)
             }
         })
     })
 }
 exports.updateUserV1 = (userid, user) => {
     return new Promise((resolve, reject) => {
-        const response = {}
         User.findByIdAndUpdate(userid, user, error => {
             if (error) {
-                response['status'] = 500
-                reject(response)
+                reject({status: 404, message: "Unable to update user information."})
             }
-            else {
-                response['status'] = 200
-                resolve(response)
-            }
+            resolve()
         })
     })
 }
 exports.deleteUserV1 = (userid) => {
     return new Promise((resolve, reject) => {
-        const response = {}
         User.findByIdAndDelete(userid, {}, error => {
             if (error) {
-                response['status'] = 500
-                reject(response)
+                reject({status: 404, message: "Unable to delete user."})
             }
-            else {
-                response['status'] = 200
-                resolve(response)
-            }
+            resolve()
         })
     })
 }
