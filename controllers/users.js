@@ -1,5 +1,4 @@
 const UsersApiService = require('../services/UsersApiService')
-const {response} = require("express");
 
 exports.userLoginV1 = (req, res) => {
     const email = req.body.email
