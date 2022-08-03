@@ -1,4 +1,4 @@
-const EntriesApiService = require("../api/EntriesApiService");
+const EntriesApiService = require("../services/EntriesApiService");
 
 exports.getEntriesV1 = (req, res) => {
     const userid = req.params.userid
