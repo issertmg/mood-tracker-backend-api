@@ -31,14 +31,14 @@ exports.addEntryV1 = (userid, entry) => {
             }
             else {
                 user.entries.push(entryDoc)
-                user.save().then(savedDoc => {
-                    if (savedDoc === user) {
-                        response['status'] = 201
-                        resolve(response)
-                    }
-                    else {
+                user.save((error, savedDoc) => {
+                    if (error) {
                         response['status'] = 500
                         reject(response)
+                    }
+                    else {
+                        response['status'] = 201
+                        resolve(response)
                     }
                 })
             }
@@ -69,14 +69,14 @@ exports.updateEntryV1 = (userid, entryid, entry) => {
             const entryDoc = user.entries.id(entryid)
             if (entryDoc) {
                 Object.keys(entry).forEach(key => entryDoc[key] = entry[key])
-                user.save().then(savedDoc => {
-                    if (savedDoc === user) {
-                        response['status'] = 200
-                        resolve(response)
-                    }
-                    else {
+                user.save((error, savedDoc) => {
+                    if (error) {
                         response['status'] = 500
                         reject(response)
+                    }
+                    else {
+                        response['status'] = 200
+                        resolve(response)
                     }
                 })
             }
@@ -94,14 +94,14 @@ exports.deleteEntryV1 = (userid, entryid) => {
             const entryDoc = user.entries.id(entryid)
             if (entryDoc) {
                 entryDoc.remove()
-                user.save().then(savedDoc => {
-                    if (savedDoc === user) {
-                        response['status'] = 200
-                        resolve(response)
-                    }
-                    else {
+                user.save((error, savedDoc) => {
+                    if (error) {
                         response['status'] = 500
                         reject(response)
+                    }
+                    else {
+                        response['status'] = 200
+                        resolve(response)
                     }
                 })
             }

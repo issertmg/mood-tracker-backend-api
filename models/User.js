@@ -1,14 +1,16 @@
 const mongoose = require('mongoose')
 const entrySchema = require('../models/Entry').schema
 const crypto = require('crypto')
+const validator = require('validator');
 
 const userSchema = mongoose.Schema({
+    nickname: {type: String, default: ''},
     firstname: {type: String, default: ''},
     middlename: {type: String, default: ''},
     lastname: {type: String, default: ''},
-    height: {type: Number, default: 0},
-    weight: {type: Number, default: 0},
-    email: {type: String, required: true},
+    height: {type: Number, default: 0, min: 0},
+    weight: {type: Number, default: 0, min: 0},
+    email: {type: String, required: true, validate: validator.isEmail},
     password: {type: String, required: true},
     entries: [entrySchema]
 })

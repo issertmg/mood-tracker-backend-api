@@ -27,15 +27,15 @@ exports.createUserV1 = (user) => {
         const response = {}
         const userDoc = new User(user)
         userDoc.hashPassword()
-        userDoc.save().then(savedDoc => {
-            if (savedDoc === userDoc) {
+        userDoc.save((error, savedDoc) => {
+            if (error) {
+                response['status'] = 500
+                reject(response)
+            }
+            else {
                 response['status'] = 201
                 response['user'] = savedDoc
                 resolve(response)
-            }
-            else {
-                response['status'] = 500
-                reject(response)
             }
         })
     })
@@ -43,8 +43,8 @@ exports.createUserV1 = (user) => {
 exports.getUserV1 = (userid) => {
     return new Promise((resolve, reject) => {
         const response = {}
-        User.findById(userid, {}, (err, user) => {
-            if (err) {
+        User.findById(userid, {}, (error, user) => {
+            if (error) {
                 response['status'] = 500
                 reject(response)
             }
@@ -59,8 +59,8 @@ exports.getUserV1 = (userid) => {
 exports.updateUserV1 = (userid, user) => {
     return new Promise((resolve, reject) => {
         const response = {}
-        User.findByIdAndUpdate(userid, user, err => {
-            if (err) {
+        User.findByIdAndUpdate(userid, user, error => {
+            if (error) {
                 response['status'] = 500
                 reject(response)
             }
@@ -74,8 +74,8 @@ exports.updateUserV1 = (userid, user) => {
 exports.deleteUserV1 = (userid) => {
     return new Promise((resolve, reject) => {
         const response = {}
-        User.findByIdAndDelete(userid, {}, err => {
-            if (err) {
+        User.findByIdAndDelete(userid, {}, error => {
+            if (error) {
                 response['status'] = 500
                 reject(response)
             }
