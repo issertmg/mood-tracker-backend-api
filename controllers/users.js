@@ -9,7 +9,7 @@ exports.userLoginV1 = (req, res) => {
 
 exports.getUserV1 = (req, res) => {
     const userid = req.params.userid
-    UsersApiService.getUserV1(user)
+    UsersApiService.getUserV1(userid)
         .then(response => {
             res.send(response)
         })
