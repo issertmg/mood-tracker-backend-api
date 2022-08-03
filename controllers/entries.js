@@ -5,10 +5,10 @@ exports.getEntriesV1 = (req, res) => {
     const date = req.query.date
     EntriesApiService.getEntriesV1(userid, date)
         .then(response => {
-            res.send(response)
+            res.status(200).json(response)
         })
         .catch(response => {
-            res.send(response)
+            res.status(500).json(response)
         })
 }
 
@@ -17,10 +17,10 @@ exports.addEntryV1 = (req, res) => {
     const entry = req.body
     EntriesApiService.addEntryV1(userid, entry)
         .then(response => {
-            res.send(response)
+            res.status(201).json(response)
         })
         .catch(response => {
-            res.send(response)
+            res.status(500).json(response)
         })
 }
 
@@ -29,10 +29,10 @@ exports.getEntryV1 = (req, res) => {
     const entryid = req.params.entryid
     EntriesApiService.getEntryV1(userid, entryid)
         .then(response => {
-            res.send(response)
+            res.status(200).json(response)
         })
         .catch(response => {
-            res.send(response)
+            res.status(500).json(response)
         })
 }
 exports.updateEntryV1 = (req, res) => {
@@ -41,10 +41,10 @@ exports.updateEntryV1 = (req, res) => {
     const entry = req.body
     EntriesApiService.updateEntryV1(userid, entryid, entry)
         .then(response => {
-            res.send(response)
+            res.status(200).json(response)
         })
         .catch(response => {
-            res.send(response)
+            res.status(500).json(response)
         })
 }
 exports.deleteEntryV1 = (req, res) => {
@@ -52,9 +52,9 @@ exports.deleteEntryV1 = (req, res) => {
     const entryid = req.params.entryid
     EntriesApiService.deleteEntryV1(userid, entryid)
         .then(response => {
-            res.send(response)
+            res.status(200).json(response)
         })
         .catch(response => {
-            res.send(response)
+            res.status(500).json(response)
         })
 }
