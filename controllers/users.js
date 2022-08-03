@@ -1,4 +1,5 @@
 const UsersApiService = require('../services/UsersApiService')
+const validator = require("validator");
 
 exports.userLoginV1 = (req, res) => {
     const email = req.body.email
@@ -24,7 +25,11 @@ exports.getUserV1 = (req, res) => {
 }
 
 exports.createUserV1 = (req, res) => {
-    const user = req.body
+    const user = {
+        email: req.body.email,
+        password: req.body.password
+    }
+
     UsersApiService.createUserV1(user)
         .then(response => {
             res.status(201).json(response)
@@ -36,7 +41,15 @@ exports.createUserV1 = (req, res) => {
 
 exports.updateUserV1 = (req, res) => {
     const userid = req.params.userid
-    const user = req.body
+    const user = {
+        nickname: req.body.nickname,
+        givenname: req.body.givenname,
+        lastname: req.body.lastname,
+        gender: req.body.gender,
+        height: req.body.height,
+        weight: req.body.weight,
+    }
+
     UsersApiService.updateUserV1(userid, user)
         .then(response => {
             res.status(200).json(response)

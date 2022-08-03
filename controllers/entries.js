@@ -14,7 +14,10 @@ exports.getEntriesV1 = (req, res) => {
 
 exports.addEntryV1 = (req, res) => {
     const userid = req.params.userid
-    const entry = req.body
+    const entry = {
+        mood: req.body.mood,
+        note: req.body.note
+    }
     EntriesApiService.addEntryV1(userid, entry)
         .then(response => {
             res.status(201).json(response)
@@ -38,7 +41,10 @@ exports.getEntryV1 = (req, res) => {
 exports.updateEntryV1 = (req, res) => {
     const userid = req.params.userid
     const entryid = req.params.entryid
-    const entry = req.body
+    const entry = {
+        mood: req.body.mood,
+        note: req.body.note
+    }
     EntriesApiService.updateEntryV1(userid, entryid, entry)
         .then(response => {
             res.status(200).json(response)
