@@ -6,4 +6,4 @@ const entrySchema = new mongoose.Schema({
     note: {type: String, required: true}
 })
 
-module.exports = mongoose.model('Entry', entrySchema, 'Entries');
+module.exports = mongoose.model('Entry', entrySchema);

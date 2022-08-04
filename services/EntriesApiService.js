@@ -9,8 +9,10 @@ exports.getEntriesV1 = (userid, date) => {
                 reject({status: 500, message: "Internal server error."})
             }
             else {
-                const entries = user.entries.filter(entry => entry.datecreated === date)
-                resolve(entries)
+                if (date)
+                    resolve(user.entries.filter(entry => entry.datecreated === date))
+                else
+                    resolve(user.entries)
             }
         })
 
@@ -18,7 +20,6 @@ exports.getEntriesV1 = (userid, date) => {
 }
 exports.addEntryV1 = (userid, entry) => {
     return new Promise((resolve, reject) => {
-        const response = {}
         const entryDoc = new Entry(entry)
         User.findById(userid,{},(error, user) => {
             if (error) {
@@ -31,7 +32,7 @@ exports.addEntryV1 = (userid, entry) => {
                         reject({status: 500, message: "Unable to add entry."})
                     }
                     else {
-                        resolve(entryDoc._id)
+                        resolve(entryDoc)
                     }
                 })
             }
