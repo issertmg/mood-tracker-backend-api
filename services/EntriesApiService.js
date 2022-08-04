@@ -18,7 +18,7 @@ exports.getEntriesV1 = (userid) => {
     })
 }
 
-exports.getLineChartDataV1 = (userid, dateFrom, dateTo) => {
+exports.getLineChartDataV1 = (userid, dateFrom, dateTo, minuteOffset) => {
     return new Promise((resolve, reject) => {
         // User.findOne({
         //     _id: userid,
@@ -34,17 +34,18 @@ exports.getLineChartDataV1 = (userid, dateFrom, dateTo) => {
         //         resolve(user.entries)
         //     }
         // })
+        MongoClient.connect(url, function(error, db){
+            if (error) {
+                reject({status: 500, message: "Internal server error."})
+            }
 
-        MongoClient.connect(url, function(err, db){
-            if (err) throw err
-                console.log('here')
             const dbo = db.db("moodTrackerApp")
             dbo.collection("Users").aggregate([
                 {$match: {
                         _id: new ObjectId("62eaae2bac1ced6155525292"),
                         $and: [
-                            {"entries.datecreated": {$gte: new Date("2022-08-03T16:00:00.000Z")}},
-                            {"entries.datecreated": {$lte: new Date("2022-08-04T15:59:00.000Z")}},
+                            {"entries.datecreated": {$gte: new Date(dateFrom)}},
+                            {"entries.datecreated": {$lte: new Date(dateTo)}},
                         ]
                     }},
                 {$project: {entries: 1, _id: 0}},
@@ -61,13 +62,20 @@ exports.getLineChartDataV1 = (userid, dateFrom, dateTo) => {
                         },
                         hour: {
                             $hour: {
-                                $add: ["$entries.datecreated", 8*3600000]
+                                $subtract: ["$entries.datecreated", minuteOffset*60000]
                             }
                         }
                     }},
                 {$group: {_id: "$hour", ave: {$avg: "$moodvalue"}}}
             ]).toArray((error, result) => {
-                console.log(result)
+                if (error) {
+                    reject({status: 500, message: "Internal server error."})
+                }
+
+                const entriesByHour = new Array(24).fill(null)
+                for (const doc of result)
+                    entriesByHour[doc._id] = doc.ave
+                resolve(entriesByHour)
             })
         })
 

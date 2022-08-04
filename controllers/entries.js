@@ -4,7 +4,8 @@ exports.getLineChartDataV1 = (req, res) => {
     const userid = req.params.userid
     const dateFrom = req.query.dateFrom
     const dateTo = req.query.dateTo
-    EntriesApiService.getLineChartDataV1(userid, dateFrom, dateTo)
+    const minuteOffset = Number(req.query.minuteOffset)
+    EntriesApiService.getLineChartDataV1(userid, dateFrom, dateTo, minuteOffset)
         .then(response => {
             res.status(200).json(response)
         })
