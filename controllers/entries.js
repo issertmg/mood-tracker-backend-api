@@ -1,15 +1,41 @@
 const EntriesApiService = require("../services/EntriesApiService");
 
-exports.getEntriesV1 = (req, res) => {
+exports.getLineChartDataV1 = (req, res) => {
     const userid = req.params.userid
-    const date = req.query.date
-    EntriesApiService.getEntriesV1(userid, date)
+    const dateFrom = req.query.dateFrom
+    const dateTo = req.query.dateTo
+    EntriesApiService.getLineChartDataV1(userid, dateFrom, dateTo)
         .then(response => {
             res.status(200).json(response)
         })
         .catch(response => {
             res.status(response.status).json({message: response.message})
         })
+}
+
+exports.getEntriesV1 = (req, res) => {
+    const userid = req.params.userid
+    const dateFrom = req.query.dateFrom
+    const dateTo = req.query.dateTo
+
+    if (dateFrom && dateTo) {
+        EntriesApiService.getEntriesByDateV1(userid, dateFrom, dateTo)
+            .then(response => {
+                res.status(200).json(response)
+            })
+            .catch(response => {
+                res.status(response.status).json({message: response.message})
+            })
+    }
+    else {
+        EntriesApiService.getEntriesV1(userid)
+            .then(response => {
+                res.status(200).json(response)
+            })
+            .catch(response => {
+                res.status(response.status).json({message: response.message})
+            })
+    }
 }
 
 exports.addEntryV1 = (req, res) => {
