@@ -8,6 +8,7 @@ const userSchema = mongoose.Schema({
     givenname: {type: String, default: ''},
     lastname: {type: String, default: ''},
     gender: {type: String, enum: ['', 'F', 'M'], default: ''},
+    birthday: {type: Date, default: null},
     height: {type: Number, default: 0, min: 0},
     weight: {type: Number, default: 0, min: 0},
     email: {type: String, unique: true, required: true, validate: validator.isEmail},

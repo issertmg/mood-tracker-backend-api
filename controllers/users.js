@@ -1,5 +1,4 @@
 const UsersApiService = require('../services/UsersApiService')
-const validator = require("validator");
 
 exports.userLoginV1 = (req, res) => {
     const email = req.body.email
@@ -48,6 +47,7 @@ exports.updateUserV1 = (req, res) => {
         gender: req.body.gender,
         height: req.body.height,
         weight: req.body.weight,
+        birthday: req.body.birthday
     }
 
     UsersApiService.updateUserV1(userid, user)
