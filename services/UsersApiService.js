@@ -1,10 +1,21 @@
 const User = require('../models/User')
+const jwt = require('jsonwebtoken')
 
 exports.userLoginV1 = (email, password) => {
     return new Promise((resolve, reject) => {
         User.findOne({email: email}, (error, userDoc) => {
             if (userDoc) {
                 if (userDoc.verifyPassword(password)) {
+                    // const userForToken = {
+                    //     userid: userDoc._id
+                    // }
+                    //
+                    // const token = jwt.sign(
+                    //     userForToken,
+                    //     process.env.JWT_SECRET,
+                    //     {expiresIn: 60 * 60}
+                    // )
+                    // resolve(token)
                     resolve(userDoc._id)
                 }
                 else {

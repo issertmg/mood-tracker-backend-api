@@ -1,4 +1,5 @@
 const UsersApiService = require('../services/UsersApiService')
+const jwt = require('jsonwebtoken')
 
 exports.userLoginV1 = (req, res) => {
     const email = req.body.email
@@ -14,6 +15,13 @@ exports.userLoginV1 = (req, res) => {
 
 exports.getUserV1 = (req, res) => {
     const userid = req.params.userid
+
+    //Sample checking of token
+    const jToken = req.query.jToken
+    const decoded = jwt.verify(jToken, process.env.JWT_SECRET)
+    console.log(decoded)
+
+
     UsersApiService.getUserV1(userid)
         .then(response => {
             res.status(200).json(response)
