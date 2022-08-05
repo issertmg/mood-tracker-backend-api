@@ -20,20 +20,6 @@ exports.getEntriesV1 = (userid) => {
 
 exports.getLineChartDataV1 = (userid, dateFrom, dateTo, minuteOffset) => {
     return new Promise((resolve, reject) => {
-        // User.findOne({
-        //     _id: userid,
-        //     'entries.datecreated': {
-        //         $gte: new Date(dateFrom),
-        //         $lte: new Date(dateTo)
-        //     }
-        //     }, 'entries -_id',(error, user) => {
-        //     if (error) {
-        //         reject({status: 500, message: "Internal server error."})
-        //     }
-        //     else {
-        //         resolve(user.entries)
-        //     }
-        // })
         MongoClient.connect(url, function(error, db){
             if (error) {
                 reject({status: 500, message: "Internal server error."})
@@ -41,15 +27,10 @@ exports.getLineChartDataV1 = (userid, dateFrom, dateTo, minuteOffset) => {
 
             const dbo = db.db("moodTrackerApp")
             dbo.collection("Users").aggregate([
-                {$match: {
-                        _id: new ObjectId("62eaae2bac1ced6155525292"),
-                        $and: [
-                            {"entries.datecreated": {$gte: new Date(dateFrom)}},
-                            {"entries.datecreated": {$lte: new Date(dateTo)}},
-                        ]
-                    }},
+                {$match: {_id: new ObjectId(userid)}},
                 {$project: {entries: 1, _id: 0}},
                 {$unwind: "$entries"},
+                {$match: {"entries.datecreated": {$gte: new Date(dateFrom), $lte: new Date(dateTo)}}},
                 {$addFields: {
                         moodvalue: {
                             $switch: {
@@ -75,6 +56,7 @@ exports.getLineChartDataV1 = (userid, dateFrom, dateTo, minuteOffset) => {
                 const entriesByHour = new Array(24).fill(null)
                 for (const doc of result)
                     entriesByHour[doc._id] = doc.ave
+                console.log(result)
                 resolve(entriesByHour)
             })
         })
@@ -82,6 +64,7 @@ exports.getLineChartDataV1 = (userid, dateFrom, dateTo, minuteOffset) => {
     })
 }
 
+// TODO: filter entries using aggregation pipeline
 exports.getEntriesByDateV1 = (userid, dateFrom, dateTo) => {
     return new Promise((resolve, reject) => {
         User.findOne({
