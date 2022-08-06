@@ -1,20 +1,15 @@
 const User = require('../models/User')
 const jwt = require('jsonwebtoken')
+const util = require('../utils')
 
 exports.loginV1 = (email, password) => {
     return new Promise((resolve, reject) => {
         User.findOne({email: email}, (error, userDoc) => {
             if (userDoc) {
                 if (userDoc.verifyPassword(password)) {
-                    const userForToken = {
+                    const token = util.generateToken({
                         userid: userDoc._id
-                    }
-
-                    const token = jwt.sign(
-                        userForToken,
-                        process.env.JWT_SECRET,
-                        {expiresIn: 60 * 60}
-                    )
+                    })
                     resolve({token, userid: userDoc._id})
                 }
                 else {
@@ -38,7 +33,10 @@ exports.createUserV1 = (user) => {
                 reject({status: 400, message: "User has invalid attribute/s."})
             }
             else {
-                resolve(savedDoc._id)
+                const token = util.generateToken({
+                    userid: savedDoc._id
+                })
+                resolve({token, userid: savedDoc._id})
             }
         })
     })

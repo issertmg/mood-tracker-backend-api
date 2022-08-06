@@ -10,11 +10,12 @@ const auth = (req, res, next) => {
                 next()
             }
         } catch (error) {
-            console.log('token error', error.name)
+            res.status(401).json({message: error.name})
         }
     }
-
-    res.status(401).end()
+    else {
+        res.status(401).json({message: 'Invalid token'})
+    }
 }
 
 module.exports = auth

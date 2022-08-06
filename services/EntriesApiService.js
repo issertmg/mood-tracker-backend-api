@@ -56,7 +56,6 @@ exports.getLineChartDataV1 = (userid, dateFrom, dateTo, minuteOffset) => {
                 const entriesByHour = new Array(24).fill(null)
                 for (const doc of result)
                     entriesByHour[doc._id] = doc.ave
-                console.log(result)
                 resolve(entriesByHour)
             })
         })
